@@ -88,11 +88,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mariu\\repo\\miniFullstack\\backend\\backend.csproj",
+      "projectUniqueName": "C:\\Users\\mariu\\repo\\miniFullstackMarius\\backend\\backend.csproj",
       "projectName": "backend",
-      "projectPath": "C:\\Users\\mariu\\repo\\miniFullstack\\backend\\backend.csproj",
+      "projectPath": "C:\\Users\\mariu\\repo\\miniFullstackMarius\\backend\\backend.csproj",
       "packagesPath": "C:\\Users\\mariu\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mariu\\repo\\miniFullstack\\backend\\obj\\",
+      "outputPath": "C:\\Users\\mariu\\repo\\miniFullstackMarius\\backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\mariu\\AppData\\Roaming\\NuGet\\NuGet.Config"

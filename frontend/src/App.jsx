@@ -1,9 +1,6 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
-import SizeValg from './SizeValg'
-import dog1 from './assets/1.jpg'
-import dog2 from './assets/2.jpg'
-import dog3 from './assets/3.jpg'
+import SizeValg from './sizeValg'
 import './App.css'
 
 function App() {
@@ -24,22 +21,42 @@ function Galleri() {
 
   const [visSizeValg, setVisSizeValg] = useState(false)
   const [size, setSize] = useState("mellem")
+
+  // Billederne kommer nu fra backend i stedet for import
+  const [billeder, setBilleder] = useState([])
+  const [loader, setLoader] = useState(true)
   const [ingenBilleder, setIngenBilleder] = useState(false)
 
   const navigate = useNavigate()
 
   // Koerer naar siden loades
   useEffect(() => {
-    if (!dog1 && !dog2 && !dog3) {
-      setIngenBilleder(true)
-    }
+    fetch('/api/GetValue')
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`)
+        return r.json()
+      })
+      .then((data) => {
+        setBilleder(data)
+        if (data.length === 0) setIngenBilleder(true)
+      })
+      .catch((err) => {
+        console.error('Kunne ikke hente billeder:', err)
+        setIngenBilleder(true)
+      })
+      .finally(() => setLoader(false))
   }, [])
 
+  // Samme variabelnavne som foer - bare fra serveren nu
+  const dog1 = billeder[0]?.url
+  const dog2 = billeder[1]?.url
+  const dog3 = billeder[2]?.url
+
   // Metode med parameter
-  function download(billede) {
+  function download(billede, navn) {
     const link = document.createElement("a")
     link.href = billede
-    link.download = "hund3.jpg"
+    link.download = navn ?? "billede.jpg"
     link.click()
     navigate("/downloaded")
   }
@@ -51,13 +68,17 @@ function Galleri() {
     setVisdog2(true)
   }
 
+  if (loader) {
+    return <p>Henter billeder...</p>
+  }
+
   return (
     <>
       {ingenBilleder && (
         <p>Ingen billeder fundet</p>
       )}
 
-      {!visDog1 && !visDog2 && !visSizeValg && (
+      {!ingenBilleder && !visDog1 && !visDog2 && !visSizeValg && (
         <div style={{ justifyContent: "center", display: "flex", gap: "16px" }}>
           <div>
             <button
@@ -85,7 +106,7 @@ function Galleri() {
           </div>
           <div>
             <button
-              onClick={() => download(dog3)}
+              onClick={() => download(dog3, billeder[2]?.navn)}
               style={{ padding: 0, border: "none", background: "none", cursor: "pointer" }}
             >
               <img

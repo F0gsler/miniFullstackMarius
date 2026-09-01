@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "TOhn64mkI8I=",
+  "dgSpecHash": "Pqk/zB9VoyA=",
   "success": true,
-  "projectFilePath": "C:\\Users\\mariu\\repo\\miniFullstack\\backend\\backend.csproj",
+  "projectFilePath": "C:\\Users\\mariu\\repo\\miniFullstackMarius\\backend\\backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mariu\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.11\\microsoft.aspnetcore.openapi.10.0.11.nupkg.sha512",
     "C:\\Users\\mariu\\.nuget\\packages\\microsoft.openapi\\2.7.5\\microsoft.openapi.2.7.5.nupkg.sha512"
