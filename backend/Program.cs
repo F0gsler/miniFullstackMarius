@@ -1,40 +1,31 @@
-using Backend.Data;
+using Backend.Application;
+using Backend.Domain;
+using Backend.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Composition root - her bindes interface til implementation
 builder.Services.AddSingleton<ImageContext>();
+builder.Services.AddSingleton<IBilledeRepository, BilledeRepository>();
+builder.Services.AddSingleton<BilledeService>();
 
 var app = builder.Build();
 
-var context = app.Services.GetRequiredService<ImageContext>();
-await context.OpretTabelAsync();
-
-// Laeg de 3 billeder fra wwwroot/images i databasen foerste gang
-if (await context.AntalAsync() == 0)
-{
-    var mappe = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "images");
-
-    foreach (var sti in Directory.GetFiles(mappe).OrderBy(p => p))
-    {
-        await context.GemAsync(new Billede
-        {
-            Navn = Path.GetFileName(sti),
-            ContentType = "image/jpeg",
-            Data = await File.ReadAllBytesAsync(sti)
-        });
-    }
-}
+await app.Services.GetRequiredService<ImageContext>().OpretTabelAsync();
+await app.Services.GetRequiredService<BilledeService>()
+    .SeedAsync(Path.Combine(app.Environment.ContentRootPath, "wwwroot", "images"));
 
 // Listen af billeder
-app.MapGet("/api/GetValue", async (ImageContext context) =>
+app.MapGet("/api/GetValue", async (BilledeService service) =>
 {
-    var billeder = await context.HentAlleAsync();
+    var billeder = await service.HentAlleAsync();
     return billeder.Select(b => new { navn = b.Navn, url = $"/api/billeder/{b.Id}" });
 });
 
 // Selve billedet, hentet fra databasen
-app.MapGet("/api/billeder/{id:int}", async (int id, ImageContext context) =>
+app.MapGet("/api/billeder/{id:int}", async (int id, BilledeService service) =>
 {
-    var billede = await context.HentAsync(id);
+    var billede = await service.HentAsync(id);
     return billede is null ? Results.NotFound() : Results.File(billede.Data, billede.ContentType);
 });
 
