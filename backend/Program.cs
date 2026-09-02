@@ -1,77 +1,41 @@
-var builder = WebApplication.CreateBuilder(args);
+using Backend.Data;
 
-builder.Services.AddOpenApi();
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddSingleton<ImageContext>();
 
 var app = builder.Build();
 
-// wwwroot skal findes, ellers er WebRootPath null
-var imageDir = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "images");
-Directory.CreateDirectory(imageDir);
+var context = app.Services.GetRequiredService<ImageContext>();
+await context.OpretTabelAsync();
 
-Console.WriteLine($"Billeder serveres fra: {imageDir}");
-
-if (app.Environment.IsDevelopment())
+// Laeg de 3 billeder fra wwwroot/images i databasen foerste gang
+if (await context.AntalAsync() == 0)
 {
-    app.MapOpenApi();
-}
-else
-{
-    // Kun i produktion - i dev roder den med Vite-proxyen
-    app.UseHttpsRedirection();
-}
+    var mappe = Path.Combine(app.Environment.ContentRootPath, "wwwroot", "images");
 
-app.UseStaticFiles();
-
-
-// Returnerer listen af billeder til frontend
-app.MapGet("/api/GetValue", () =>
-{
-    var billeder = Directory
-        .EnumerateFiles(imageDir)
-        .Where(p => IsImage(Path.GetExtension(p)))
-        .OrderBy(p => p)
-        .Select(p => new
+    foreach (var sti in Directory.GetFiles(mappe).OrderBy(p => p))
+    {
+        await context.GemAsync(new Billede
         {
-            navn = Path.GetFileName(p),
-            url = $"/images/{Path.GetFileName(p)}"
+            Navn = Path.GetFileName(sti),
+            ContentType = "image/jpeg",
+            Data = await File.ReadAllBytesAsync(sti)
         });
+    }
+}
 
-    return Results.Ok(billeder);
+// Listen af billeder
+app.MapGet("/api/GetValue", async (ImageContext context) =>
+{
+    var billeder = await context.HentAlleAsync();
+    return billeder.Select(b => new { navn = b.Navn, url = $"/api/billeder/{b.Id}" });
 });
 
-
-// Upload - gemmer nu i wwwroot/images sa filerne kan hentes bagefter
-app.MapPost("/api/Postvalue", async (IFormFileCollection files) =>
+// Selve billedet, hentet fra databasen
+app.MapGet("/api/billeder/{id:int}", async (int id, ImageContext context) =>
 {
-    if (files.Count == 0)
-        return Results.BadRequest(new { error = "Ingen filer modtaget." });
-
-    var saved = new List<object>();
-
-    foreach (var file in files)
-    {
-        if (file.Length == 0) continue;
-
-        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
-        if (!IsImage(ext)) continue;
-
-        var fileName = $"{Guid.NewGuid():N}{ext}";
-        var path = Path.Combine(imageDir, fileName);
-
-        await using var stream = File.Create(path);
-        await file.CopyToAsync(stream);
-
-        saved.Add(new { navn = fileName, url = $"/images/{fileName}" });
-    }
-
-    return Results.Ok(new { count = saved.Count, files = saved });
-})
-.Accepts<IFormFileCollection>("multipart/form-data")
-.Produces<object>(StatusCodes.Status200OK)
-.DisableAntiforgery();
+    var billede = await context.HentAsync(id);
+    return billede is null ? Results.NotFound() : Results.File(billede.Data, billede.ContentType);
+});
 
 app.Run();
-
-
-static bool IsImage(string ext) =>
-    ext is ".jpg" or ".jpeg" or ".png" or ".gif" or ".webp";

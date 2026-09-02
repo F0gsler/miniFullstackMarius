@@ -1,30 +1,36 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\mariu\\repo\\miniFullstackMarius\\backend\\backend.csproj": {}
+    "C:\\Users\\mariu\\WebstormProjects\\miniFullstackMarius\\backend\\backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\mariu\\repo\\miniFullstackMarius\\backend\\backend.csproj": {
+    "C:\\Users\\mariu\\WebstormProjects\\miniFullstackMarius\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\mariu\\repo\\miniFullstackMarius\\backend\\backend.csproj",
+        "projectUniqueName": "C:\\Users\\mariu\\WebstormProjects\\miniFullstackMarius\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\mariu\\repo\\miniFullstackMarius\\backend\\backend.csproj",
+        "projectPath": "C:\\Users\\mariu\\WebstormProjects\\miniFullstackMarius\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\mariu\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\mariu\\repo\\miniFullstackMarius\\backend\\obj\\",
+        "outputPath": "C:\\Users\\mariu\\WebstormProjects\\miniFullstackMarius\\backend\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\mariu\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\mariu\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net10.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net10.0": {
-            "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {}
           }
@@ -39,14 +45,21 @@
           "auditLevel": "low",
           "auditMode": "all"
         },
-        "SdkAnalysisLevel": "10.0.300"
+        "SdkAnalysisLevel": "10.0.200"
       },
       "frameworks": {
         "net10.0": {
-          "framework": "net10.0",
           "targetAlias": "net10.0",
           "dependencies": {
+            "Dapper": {
+              "target": "Package",
+              "version": "[2.1.79, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
+              "target": "Package",
+              "version": "[10.0.11, )"
+            },
+            "Microsoft.Data.Sqlite": {
               "target": "Package",
               "version": "[10.0.11, )"
             }
@@ -70,7 +83,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.300/PortableRuntimeIdentifierGraph.json",
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.202/PortableRuntimeIdentifierGraph.json",
           "packagesToPrune": {
             "Microsoft.AspNetCore": "(,10.0.32767]",
             "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

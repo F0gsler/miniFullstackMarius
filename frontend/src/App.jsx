@@ -29,7 +29,6 @@ function Galleri() {
 
   const navigate = useNavigate()
 
-  // Koerer naar siden loades
   useEffect(() => {
     fetch('/api/GetValue')
       .then((r) => {
@@ -47,7 +46,7 @@ function Galleri() {
       .finally(() => setLoader(false))
   }, [])
 
-  // Samme variabelnavne som foer - bare fra serveren nu
+  // Samme variabelnavne som før - bare fra serveren nu
   const dog1 = billeder[0]?.url
   const dog2 = billeder[1]?.url
   const dog3 = billeder[2]?.url
