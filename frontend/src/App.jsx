@@ -1,15 +1,17 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
-import paymentPage from './Page/PaymentPage'
-import homePage from './Page/homePage'
+import PaymentPage from './Page/PaymentPage'
+import HomePage from './Page/HomePage'
+import AdminPage from './Page/AdminPage'
 import './App.css'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<homePage />} />
-        <Route path="/payment" element={<paymentPage />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/payment" element={<PaymentPage />} />
+        <Route path="/admin" element={<AdminPage />} />
       </Routes>
     </BrowserRouter>
   )

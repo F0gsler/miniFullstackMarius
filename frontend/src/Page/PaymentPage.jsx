@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
 import '../App.css'
 
-function paymentPage() {
+function PaymentPage() {
 
 
 
@@ -14,4 +14,4 @@ function paymentPage() {
 }
 
 
-export default paymentPage
+export default PaymentPage
